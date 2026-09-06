@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>8-ஆம் வகுப்பு அறிவியல்: அலகு 2 - விசையும் அழுத்தமும் நினைவூட்டல் அட்டைகள்</title>
+  <style>
+    :root {
+      --bg-color: #f1f5f9;
+      --card-bg-front: #ffffff;
+      --card-bg-back: #0f172a;
+      --primary: #0284c7;
+      --accent: #f59e0b;
+      --text-dark: #0f172a;
+      --text-light: #f8fafc;
+      --border-color: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Mukta Malar", "Latha", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+      padding: 2rem 1rem;
+      min-height: 100vh;
+    }
+
+    header {
+      max-width: 1100px;
+      margin: 0 auto 2rem;
+      text-align: center;
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .btn-back {
+      text-decoration: none;
+      background: #e2e8f0;
+      color: #334155;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .btn-back:hover {
+      background: #cbd5e1;
+    }
+
+    h1 {
+      font-size: 1.85rem;
+      color: #0369a1;
+      margin-bottom: 0.5rem;
+    }
+
+    p.subtitle {
+      font-size: 1rem;
+      color: #64748b;
+      margin-bottom: 1.5rem;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-input {
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 400px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+    }
+
+    .btn {
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #0369a1;
+    }
+
+    .btn-secondary {
+      background-color: #475569;
+    }
+
+    .btn-secondary:hover {
+      background-color: #334155;
+    }
+
+    .info-bar {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 0.5rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      perspective: 1000px;
+    }
+
+    .card-scene {
+      background-color: transparent;
+      height: 220px;
+      cursor: pointer;
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .card.is-flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.25rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .card-front {
+      background-color: var(--card-bg-front);
+      color: var(--text-dark);
+    }
+
+    .card-number {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #64748b;
+      text-align: left;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card-front .question {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin: auto 0;
+      line-height: 1.4;
+    }
+
+    .hint-text {
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .card-back {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: var(--text-light);
+      transform: rotateY(180deg);
+      border-color: #334155;
+    }
+
+    .badge-answer {
+      font-size: 0.75rem;
+      background-color: var(--accent);
+      color: #78350f;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      align-self: flex-start;
+      text-transform: uppercase;
+    }
+
+    .card-back .answer {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #38bdf8;
+      margin: auto 0;
+      line-height: 1.5;
+    }
+
+    .card-back .explanation {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      margin-top: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="nav-bar">
+    <a href="./index.html" class="btn-back">← முகப்பு (Home)</a>
+  </div>
+  <h1>8-ஆம் வகுப்பு அறிவியல்: அலகு 2 - விசையும் அழுத்தமும்</h1>
+  <p class="subtitle">பாடப் புத்தக வினா-விடை விரைவு நினைவூட்டல் அட்டைகள் (Interactive Flashcards)</p>
+
+  <div class="controls">
+    <input type="text" id="searchInput" class="search-input" placeholder="தேடுக (எ.கா: பாஸ்கல், உராய்வு, வளிமண்டலம்)..." onkeyup="filterCards()">
+    <button class="btn" onclick="flipAll(true)">அனைத்தையும் திருப்பு</button>
+    <button class="btn btn-secondary" onclick="flipAll(false)">மீட்டமைக்க</button>
+  </div>
+  <div class="info-bar">💡 அட்டையைத் தொட்டு/கிளிக் செய்து விடையைக் காண்க (Click to Flip)</div>
+</header>
+
+<main class="grid" id="flashcardGrid">
+
+  <!-- Card 1 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 01</span>
+        <div class="question">பொருள் இயங்கும் திசைக்கு எதிரான திசையில் விசையைச் செலுத்தினால் அதன் இயக்கம் என்னவாகும்?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">நின்று விடும்</div>
+        <div class="explanation">எதிர் விசை இயக்கத்தைத் தடைசெய்து ஓய்வு நிலைக்குக் கொண்டுவரும்</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 02</span>
+        <div class="question">திரவத்தினால் பெறப்படும் அழுத்தம் எவற்றினால் அதிகரிக்கிறது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">அடர்த்தி மற்றும் திரவத்தம்ப உயரம்</div>
+        <div class="explanation">ஆழம் (h) மற்றும் அடர்த்தி (d) அதிகரிக்க அழுத்தம் அதிகரிக்கும் ($P = h\rho g$)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 03</span>
+        <div class="question">அழுத்தத்தின் அலகுகள் யாவை?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">பாஸ்கல் (Pa) மற்றும் N/m²</div>
+        <div class="explanation">1 பாஸ்கல் = 1 நியூட்டன் / சதுர மீட்டர் ($1\text{ Pa} = 1\text{ N m}^{-2}$)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 4 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 04</span>
+        <div class="question">கடல் மட்டத்தில் வளிமண்டல அழுத்தத்தின் மதிப்பு எவ்வளவு?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">76 செ.மீ பாதரசத் தம்பம்</div>
+        <div class="explanation">760 மி.மீ பாதரசம் அல்லது $1.013 \times 10^5\text{ N/m}^2$</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 5 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 05</span>
+        <div class="question">பாஸ்கல் விதி எவற்றில் பயன்படுகிறது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">நீரியல் உயர்த்தி, தடை செலுத்தி (பிரேக்), அழுத்தப்பட்ட பொதி</div>
+        <div class="explanation">மூடப்பட்ட அமைப்பில் கொடுக்கப்படும் அழுத்தம் சமமாகப் பரவுகிறது</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 6 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 06</span>
+        <div class="question">கிரீஸ், நீர், தேங்காய் எண்ணெய், நெய் - இவற்றுள் அதிக பாகுநிலை உடையது எது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">கிரீஸ் (Grease)</div>
+        <div class="explanation">ஏடுகளுக்கு இடையே அதிக உராய்வு விசை இருப்பதால் பாயும் தன்மை குறைவு</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 7 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 07</span>
+        <div class="question">பாகுநிலையின் (Viscosity) அலகு என்ன?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">பாய்ஸ் (Poise) அல்லது $\text{N s m}^{-2}$</div>
+        <div class="explanation">SI அலகு: $\text{kg m}^{-1}\text{s}^{-1}$ அல்லது $\text{N s m}^{-2}$</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 8 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 08</span>
+        <div class="question">தாவரங்களில் நீர் மேலே ஏறுவதற்குக் காரணமான பண்பு எது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">பரப்பு இழுவிசை (Surface Tension)</div>
+        <div class="explanation">நுண்புழை ஏற்ற விளைவினால் சைலக் குழாய்கள் வழி நீர் மேலேறுகிறது</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 9 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 09</span>
+        <div class="question">எளிய பாதரசமானியை முதன்முதலில் உருவாக்கியவர் யார்?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">டாரிசெல்லி (Torricelli)</div>
+        <div class="explanation">வளிமண்டல அழுத்தத்தை அளவிடப் பயன்படும் கருவி</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 10 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 10</span>
+        <div class="question">உராய்வின் வகைகள் யாவை? குறைவான உராய்வு எது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">நிலை உராய்வு, இயக்க உராய்வு, உருளும் உராய்வு</div>
+        <div class="explanation">உருளும் உராய்வு (Rolling friction) நழுவு உராய்வை விடக் குறைவானது</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 11 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 11</span>
+        <div class="question">பொருளின் எடை மிதப்பு விசையை விட அதிகமாக இருந்தால் என்னவாகும்?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">பொருள் மூழ்கும்</div>
+        <div class="explanation">கீழ்நோக்கிய விசை > மேல்நோக்கிய விசை எனில் பொருள் நீரில் மூழ்கிவிடும்</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 12 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 12</span>
+        <div class="question">திரவங்களால் தரப்படும் மேல்நோக்கிய விசைக்கு என்ன பெயர்?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">மிதப்பு விசை (Buoyant force)</div>
+        <div class="explanation">கீழ்நோக்கிய விசை: எடை :: மேல்நோக்கிய விசை: மிதப்பு விசை</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 13 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 13</span>
+        <div class="question">தோள் பைகளில் அகலமான பட்டைகள் அமைக்கப்படுவது ஏன்?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">அழுத்தத்தைக் குறைக்க</div>
+        <div class="explanation">தொடு பரப்பு அதிகமானால் தோள்பட்டை மீது ஏற்படும் அழுத்தம் குறையும்</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 14 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 14</span>
+        <div class="question">கூரிய கத்தி காய்கறிகளை எளிதாக வெட்டப் பயன்படுவது ஏன்?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">அதிக அழுத்தத்தைத் தருகிறது</div>
+        <div class="explanation">முனையின் தொடு பரப்பு மிகக் குறைவு என்பதால் அதிக அழுத்தம் கிடைக்கிறது</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 15 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 15</span>
+        <div class="question">வானூர்தியில் செல்லும்போது மை பேனா பயன்படுத்த உகந்ததல்ல ஏன்?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">மை வெளியே கசிந்துவிடும்</div>
+        <div class="explanation">உயர செல்லச் செல்ல வளிமண்டல அழுத்தம் குறைவதால் பேனாவிலுள்ள மை வெளியேறுகிறது</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 16 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 16</span>
+        <div class="question">மிதிவண்டியின் அச்சுகளில் பந்து தாங்கிகள் (Ball bearings) எதற்காகப் பயன்படுகின்றன?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">உராய்வைக் குறைக்க</div>
+        <div class="explanation">நழுவு உராய்வை குறைந்த உருளும் உராய்வாக மாற்றுகிறது</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 17 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 17</span>
+        <div class="question">உராய்வைக் குறைக்கப் பயன்படுத்தப்படும் பொருட்கள் யாவை?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">உயவுப் பொருட்கள் (Lubricants)</div>
+        <div class="explanation">எண்ணெய், கிரீஸ், கிராஃபைட் போன்றவை மேற்பரப்புகளின் உராய்வைத் தணிக்கின்றன</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 18 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 18</span>
+        <div class="question">திரவ அடுக்குகளுக்கு இடையே செயல்படும் உராய்வு விசை எது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">பாகுநிலை விசை (Viscous Force)</div>
+        <div class="explanation">திரவங்கள் பாயும் போது அவற்றின் அடுக்குகளுக்கு இடையே சார்பியக்கத்தை எதிர்க்கும் விசை</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 19 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 19</span>
+        <div class="question">ஒரு கல்லின் எடை 500 N, பரப்பளவு 25 செ.மீ² எனில் ஏற்படும் அழுத்தம் எவ்வளவு?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">2,00,000 பாஸ்கல் (Pa)</div>
+        <div class="explanation">அழுத்தம் = விசை / பரப்பு = $500 / (25 \times 10^{-4}) = 2,00,000\text{ N/m}^2$</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 20 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 20</span>
+        <div class="question">சுத்தியால் ஆணி அடிக்கப்பட்டவுடன் ஆணியைத் தொடும்போது சூடாக இருப்பது ஏன்?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">உராய்வினால் ஏற்படும் வெப்பம்</div>
+        <div class="explanation">மரப்பலகைக்கும் ஆணிக்கும் இடையே ஏற்படும் உராய்வு இயக்க ஆற்றலை வெப்ப ஆற்றலாக மாற்றுகிறது</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  function toggleFlip(scene) {
+    const card = scene.querySelector('.card');
+    card.classList.toggle('is-flipped');
+  }
+
+  function flipAll(shouldFlip) {
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+      if (shouldFlip) {
+        card.classList.add('is-flipped');
+      } else {
+        card.classList.remove('is-flipped');
+      }
+    });
+  }
+
+  function filterCards() {
+    const term = document.getElementById('searchInput').value.toLowerCase().trim();
+    const scenes = document.querySelectorAll('.card-scene');
+
+    scenes.forEach(scene => {
+      const q = scene.querySelector('.question').innerText.toLowerCase();
+      const a = scene.querySelector('.answer').innerText.toLowerCase();
+      const num = scene.querySelector('.card-number').innerText.toLowerCase();
+
+      if (q.includes(term) || a.includes(term) || num.includes(term)) {
+        scene.style.display = 'block';
+      } else {
+        scene.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
