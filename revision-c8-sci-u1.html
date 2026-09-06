@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>8-ஆம் வகுப்பு அறிவியல் - அளவீட்டியல் விரைவு நினைவூட்டல் அட்டைகள்</title>
+  <style>
+    :root {
+      --bg-color: #f1f5f9;
+      --card-bg-front: #ffffff;
+      --card-bg-back: #1e293b;
+      --primary: #2563eb;
+      --accent: #f59e0b;
+      --text-dark: #0f172a;
+      --text-light: #f8fafc;
+      --border-color: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Mukta Malar", "Latha", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+      padding: 2rem 1rem;
+      min-height: 100vh;
+    }
+
+    header {
+      max-width: 1100px;
+      margin: 0 auto 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.85rem;
+      color: #1e3a8a;
+      margin-bottom: 0.5rem;
+    }
+
+    p.subtitle {
+      font-size: 1rem;
+      color: #64748b;
+      margin-bottom: 1.5rem;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-input {
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 400px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+    }
+
+    .btn {
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #1d4ed8;
+    }
+
+    .btn-secondary {
+      background-color: #475569;
+    }
+
+    .btn-secondary:hover {
+      background-color: #334155;
+    }
+
+    .info-bar {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 0.5rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      perspective: 1000px;
+    }
+
+    /* Flashcard Container */
+    .card-scene {
+      background-color: transparent;
+      height: 220px;
+      cursor: pointer;
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .card.is-flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.25rem;
+      border: 1px solid var(--border-color);
+    }
+
+    /* Front side */
+    .card-front {
+      background-color: var(--card-bg-front);
+      color: var(--text-dark);
+    }
+
+    .card-number {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #64748b;
+      text-align: left;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card-front .question {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin: auto 0;
+      line-height: 1.4;
+    }
+
+    .hint-text {
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    /* Back side */
+    .card-back {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: var(--text-light);
+      transform: rotateY(180deg);
+      border-color: #334155;
+    }
+
+    .badge-answer {
+      font-size: 0.75rem;
+      background-color: var(--accent);
+      color: #78350f;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      align-self: flex-start;
+      text-transform: uppercase;
+    }
+
+    .card-back .answer {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #38bdf8;
+      margin: auto 0;
+      line-height: 1.5;
+    }
+
+    .card-back .explanation {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      margin-top: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>8-ஆம் வகுப்பு அறிவியல்: அலகு 1 - அளவீட்டியல்</h1>
+  <p class="subtitle">புத்தக வினா-விடை விரைவு நினைவூட்டல் அட்டைகள் (Interactive Flashcards)</p>
+
+  <div class="controls">
+    <input type="text" id="searchInput" class="search-input" placeholder="தேடுக (எ.கா: SI அலகு, வெப்பநிலை, ஆம்பியர்)..." onkeyup="filterCards()">
+    <button class="btn" onclick="flipAll(true)">அனைத்தையும் திருப்பு</button>
+    <button class="btn btn-secondary" onclick="flipAll(false)">மீட்டமைக்க</button>
+  </div>
+  <div class="info-bar">💡 அட்டையைத் தொட்டு/கிளிக் செய்து விடையைக் காண்க (Click to Flip)</div>
+</header>
+
+<main class="grid" id="flashcardGrid">
+
+  <!-- Card 1 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 01</span>
+        <div class="question">ஆங்கிலேய அலகு முறை எது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">FPS முறை</div>
+        <div class="explanation">(Foot, Pound, Second)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 02</span>
+        <div class="question">மின்னோட்டம் என்பது எவ்வகை அளவு?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">அடிப்படை அளவு</div>
+        <div class="explanation">SI அடிப்படை அளவுகளில் ஒன்று</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 03</span>
+        <div class="question">மின்னோட்டத்தை அளவிடப் பயன்படும் கருவி எது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">அம்மீட்டர் (Ammeter)</div>
+        <div class="explanation">சுற்றில் தொடரிணைப்பில் இணைக்கப்படும்</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 4 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 04</span>
+        <div class="question">மின்னோட்டத்தின் SI அலகு மற்றும் வரையறை?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">ஆம்பியர் (A)</div>
+        <div class="explanation">1 கூலும் மின்னூட்டம் 1 வினாடியில் பாய்வது (1 A = 1 C / 1 s)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 5 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 05</span>
+        <div class="question">வெப்பநிலையின் SI அலகு எது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">கெல்வின் (K)</div>
+        <div class="explanation">SI அலகு முறையில் ஏற்றுக்கொள்ளப்பட்ட அலகு</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 6 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 06</span>
+        <div class="question">வெப்பநிலையை அளவிடப் பயன்படும் பிற அலகுகள் யாவை?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">செல்சியஸ் (°C) & ஃபாரன்ஹீட் (°F)</div>
+        <div class="explanation">மருத்துவ மற்றும் அன்றாட பயன்பாட்டில் உள்ளவை</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 7 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 07</span>
+        <div class="question">ஒரு பொருளின் குளிர்ச்சி அல்லது வெப்பத்தின் அளவு எவ்வாறு குறிப்பிடப்படுகிறது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">வெப்பநிலை (Temperature)</div>
+        <div class="explanation">துகள்களின் சராசரி இயக்க ஆற்றலின் அளவீடு</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 8 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 08</span>
+        <div class="question">ஒளிச்செறிவு என்பது எதன் ஒளிச்செறிவாகும்? அதன் அலகு என்ன?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">கண்ணுறு ஒளி (Visible light)</div>
+        <div class="explanation">SI அலகு: கேண்டிலா (cd)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 9 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 09</span>
+        <div class="question">ஒரு மோல் என்பது எத்தனை துகள்களைக் கொண்டுள்ளது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">6.023 × 10²³ துகள்கள்</div>
+        <div class="explanation">அவகேட்ரோ எண் (Avogadro's Number)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 10 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 10</span>
+        <div class="question">இரண்டு நேர்க்கோடுகள் அல்லது தளங்களின் குறுக்கீட்டினால் உருவாவது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">தளக்கோணம் (Plane Angle)</div>
+        <div class="explanation">SI அலகு: ரேடியன் (rad)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 11 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 11</span>
+        <div class="question">மூன்று அல்லது அதற்கு மேற்பட்ட தளங்களின் குறுக்கீட்டினால் உருவாகும் கோணம்?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">திண்மக்கோணம் (Solid Angle)</div>
+        <div class="explanation">SI அலகு: ஸ்டீரேடியன் (sr)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 12 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 12</span>
+        <div class="question">அளவிடப்பட்ட மதிப்பு உண்மை மதிப்புடன் நெருங்கி இருப்பது எது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">துல்லியத்தன்மை (Accuracy)</div>
+        <div class="explanation">அளவீடு உண்மை மதிப்புக்கு எவ்வளவு அருகில் உள்ளது என்பதைக் குறிக்கும்</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 13 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 13</span>
+        <div class="question">இரண்டு அல்லது அதற்கு மேற்பட்ட அளவீடுகள் ஒன்றுக்கொன்று நெருங்கி இருப்பது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">நுட்பம் (Precision)</div>
+        <div class="explanation">மீண்டும் மீண்டும் செய்யப்படும் அளவீடுகளின் நெருக்கம்</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 14 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 14</span>
+        <div class="question">அளவீடுகளின் நிலையற்ற தன்மை எவ்வாறு அழைக்கப்படுகிறது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">பிழை (Error)</div>
+        <div class="explanation">உண்மை மதிப்பிற்கும் அளவிடப்பட்ட மதிப்பிற்கும் இடையே உள்ள வேறுபாடு</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 15 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 15</span>
+        <div class="question">SI முறையில் உள்ள அடிப்படை அளவுகளின் எண்ணிக்கை எத்தனை?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">7 அடிப்படை அளவுகள்</div>
+        <div class="explanation">நீளம், நிறை, காலம், வெப்பநிலை, மின்னோட்டம், ஒளிச்செறிவு, பொருளின் அளவு</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 16 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 16</span>
+        <div class="question">அணுக் கடிகாரங்களில் பயன்படும் அலைவுகளின் வகை எது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">அணுவின் அதிர்வுகள்</div>
+        <div class="explanation">அணுவினுள் ஏற்படும் சீரான அதிர்வுகளின் அடிப்படையில் இயங்குகிறது</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 17 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 17</span>
+        <div class="question">GPS (இருப்பிடங்காட்டி) கருவிகளில் பயன்படும் கடிகாரங்கள் யாவை?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">அணுக் கடிகாரங்கள் (Atomic Clocks)</div>
+        <div class="explanation">மிகத் துல்லியமான நேரக் கணக்கீட்டிற்குப் பயன்படுகின்றன</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 18 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 18</span>
+        <div class="question">காட்சிப்படுத்துதலின் அடிப்படையில் கடிகாரங்களின் வகைகள் யாவை?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">ஒப்புமை வகை & எண்ணிலக்க வகை</div>
+        <div class="explanation">Analog clocks மற்றும் Digital clocks</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 19 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 19</span>
+        <div class="question">4.582 எண்ணின் முழுமையாக்கப்பட்ட மதிப்பு என்ன?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">4.58</div>
+        <div class="explanation">கடைசி இலக்கம் (2) ஐந்தை விடக் குறைவாக உள்ளதால் மாற்றமில்லை</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 20 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 20</span>
+        <div class="question">நண்பனுக்கு 100°C காய்ச்சல் இருப்பது சாத்தியமா? ஏன்?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">சாத்தியமில்லை (100°F என்பதே சரி)</div>
+        <div class="explanation">100°C என்பது நீரின் கொதிநிலை; மனித உடல் காய்ச்சல் ஃபாரன்ஹீட்டில் (°F) அளவிடப்படுகிறது</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  function toggleFlip(scene) {
+    const card = scene.querySelector('.card');
+    card.classList.toggle('is-flipped');
+  }
+
+  function flipAll(shouldFlip) {
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+      if (shouldFlip) {
+        card.classList.add('is-flipped');
+      } else {
+        card.classList.remove('is-flipped');
+      }
+    });
+  }
+
+  function filterCards() {
+    const term = document.getElementById('searchInput').value.toLowerCase().trim();
+    const scenes = document.querySelectorAll('.card-scene');
+
+    scenes.forEach(scene => {
+      const q = scene.querySelector('.question').innerText.toLowerCase();
+      const a = scene.querySelector('.answer').innerText.toLowerCase();
+      const num = scene.querySelector('.card-number').innerText.toLowerCase();
+
+      if (q.includes(term) || a.includes(term) || num.includes(term)) {
+        scene.style.display = 'block';
+      } else {
+        scene.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
