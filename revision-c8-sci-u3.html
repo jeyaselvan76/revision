@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>8-ஆம் வகுப்பு அறிவியல்: அலகு 3 - ஒளியியல் நினைவூட்டல் அட்டைகள்</title>
+  <style>
+    :root {
+      --bg-color: #f1f5f9;
+      --card-bg-front: #ffffff;
+      --card-bg-back: #0f172a;
+      --primary: #0284c7;
+      --accent: #f59e0b;
+      --text-dark: #0f172a;
+      --text-light: #f8fafc;
+      --border-color: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Mukta Malar", "Latha", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+      padding: 2rem 1rem;
+      min-height: 100vh;
+    }
+
+    header {
+      max-width: 1100px;
+      margin: 0 auto 2rem;
+      text-align: center;
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .btn-back {
+      text-decoration: none;
+      background: #e2e8f0;
+      color: #334155;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .btn-back:hover {
+      background: #cbd5e1;
+    }
+
+    h1 {
+      font-size: 1.85rem;
+      color: #0369a1;
+      margin-bottom: 0.5rem;
+    }
+
+    p.subtitle {
+      font-size: 1rem;
+      color: #64748b;
+      margin-bottom: 1.5rem;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-input {
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 400px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+    }
+
+    .btn {
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #0369a1;
+    }
+
+    .btn-secondary {
+      background-color: #475569;
+    }
+
+    .btn-secondary:hover {
+      background-color: #334155;
+    }
+
+    .info-bar {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 0.5rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      perspective: 1000px;
+    }
+
+    .card-scene {
+      background-color: transparent;
+      height: 220px;
+      cursor: pointer;
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .card.is-flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.25rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .card-front {
+      background-color: var(--card-bg-front);
+      color: var(--text-dark);
+    }
+
+    .card-number {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #64748b;
+      text-align: left;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card-front .question {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin: auto 0;
+      line-height: 1.4;
+    }
+
+    .hint-text {
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .card-back {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: var(--text-light);
+      transform: rotateY(180deg);
+      border-color: #334155;
+    }
+
+    .badge-answer {
+      font-size: 0.75rem;
+      background-color: var(--accent);
+      color: #78350f;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      align-self: flex-start;
+      text-transform: uppercase;
+    }
+
+    .card-back .answer {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #38bdf8;
+      margin: auto 0;
+      line-height: 1.5;
+    }
+
+    .card-back .explanation {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      margin-top: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="nav-bar">
+    <a href="./index.html" class="btn-back">← முகப்பு (Home)</a>
+  </div>
+  <h1>8-ஆம் வகுப்பு அறிவியல்: அலகு 3 - ஒளியியல்</h1>
+  <p class="subtitle">பாடப் புத்தக வினா-விடை விரைவு நினைவூட்டல் அட்டைகள் (Interactive Flashcards)</p>
+
+  <div class="controls">
+    <input type="text" id="searchInput" class="search-input" placeholder="தேடுக (எ.கா: குழி ஆடி, குவி ஆடி, ஸ்நெல் விதி)..." onkeyup="filterCards()">
+    <button class="btn" onclick="flipAll(true)">அனைத்தையும் திருப்பு</button>
+    <button class="btn btn-secondary" onclick="flipAll(false)">மீட்டமைக்க</button>
+  </div>
+  <div class="info-bar">💡 அட்டையைத் தொட்டு/கிளிக் செய்து விடையைக் காண்க (Click to Flip)</div>
+</header>
+
+<main class="grid" id="flashcardGrid">
+
+  <!-- Card 1 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 01</span>
+        <div class="question">வளைந்த எதிரொளிக்கும் பரப்பை உடைய ஆடிகள் எவை?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">கோளக ஆடிகள் (Spherical Mirrors)</div>
+        <div class="explanation">கோளத்தின் பகுதியாக வெட்டப்பட்டு வளைந்த பரப்பை எதிரொளிக்கும் பகுதியாகக் கொண்டவை</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 02</span>
+        <div class="question">உட்புறமாக எதிரொளிக்கும் பரப்பை உடைய வளைவு ஆடி எது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">குழி ஆடி (Concave Mirror)</div>
+        <div class="explanation">கோளத்தின் உள்நோக்கி வளைந்த பரப்பில் ஒளி எதிரொளிப்பு நடைபெறுகிறது</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 03</span>
+        <div class="question">வாகனங்களில் பின் காட்சி ஆடியாகப் (Rear view mirror) பயன்படுவது எது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">குவி ஆடி (Convex Mirror)</div>
+        <div class="explanation">நேரான, சிறிய மாய பிம்பத்தைத் தோற்றுவித்து அகன்ற பார்வைப்புலத்தைத் தருகிறது</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 4 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 04</span>
+        <div class="question">ஆடி மையத்தையும், வளைவு மையத்தையும் இணைக்கும் கற்பனைக் கோடு எது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">முதன்மை அச்சு (Principal Axis)</div>
+        <div class="explanation">ஆடி மையம் (P) மற்றும் வளைவு மையம் (C) வழியே செல்லும் நேர்க்கோடு</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 5 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 05</span>
+        <div class="question">முதன்மைக் குவியத்திற்கும் (F) ஆடி மையத்திற்கும் (P) இடையே உள்ள தொலைவு?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">குவியத் தொலைவு (Focal Length - f)</div>
+        <div class="explanation">வளைவு ஆரத்தில் சரிபாதி ஆகும் ($f = R / 2$)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 6 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 06</span>
+        <div class="question">கோளக ஆடியின் குவியத்தொலைவு 10 செ.மீ எனில், அதன் வளைவு ஆரம் (R) எவ்வளவு?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">20 செ.மீ</div>
+        <div class="explanation">வளைவு ஆரம் $R = 2 \times f = 2 \times 10 = 20\text{ cm}$</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 7 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 07</span>
+        <div class="question">பொருளின் அளவும் பிம்பத்தின் அளவும் சமமாக இருக்க குழி ஆடியில் பொருள் எங்கு வைக்கப்பட வேண்டும்?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">வளைவு மையத்தில் (C-ல்)</div>
+        <div class="explanation">பொருள் C-ல் இருக்கும்போது அதே அளவில் தலைகீழான மெய் பிம்பம் C-லேயே கிடைக்கும்</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 8 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 08</span>
+        <div class="question">காருந்து நிலையங்களில் கண்காணிப்பு கண்ணாடியாகப் பயன்படும் ஆடி எது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">குவி ஆடி (Convex Mirror)</div>
+        <div class="explanation">குவி ஆடி பரந்த பார்வை பரப்பினை வழங்கி பார்வையிட உதவுகிறது</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 9 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 09</span>
+        <div class="question">கோளக ஆடியின் வடிவியல் மையம் எவ்வாறு அழைக்கப்படுகிறது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">ஆடி மையம் (Pole - P)</div>
+        <div class="explanation">ஆடியின் எதிரொளிக்கும் பரப்பின் மையப்புள்ளி ஆடி மையம் எனப்படும்</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 10 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 10</span>
+        <div class="question">குவி ஆடியில் தோன்றும் பிம்பத்தின் தன்மை எத்தகையது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">நேரான, சிறிய மாய பிம்பம்</div>
+        <div class="explanation">திரையில் பிடிக்க முடியாத நேரான சிறிய மாய பிம்பம் உருவாகும்</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 11 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 11</span>
+        <div class="question">கண் மற்றும் பல் மருத்துவர் நோயாளிகளைப் பரிசோதிக்கப் பயன்படுத்தும் ஆடி எது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">குழி ஆடி (Concave Mirror)</div>
+        <div class="explanation">பொருள் மிக அருகில் உள்ளபோது நேரான பெரிதாக்கப்பட்ட பிம்பத்தைத் தரும்</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 12 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 12</span>
+        <div class="question">ஒளிக் கதிர் ஒன்றின் படுகோணத்தின் மதிப்பு 45° எனில் எதிரொளிப்புக் கோணம் எவ்வளவு?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">45°</div>
+        <div class="explanation">ஒளி எதிரொளிப்பு விதிப்படி: படுகோணம் = எதிரொளிப்புக் கோணம் ($\angle i = \angle r$)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 13 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 13</span>
+        <div class="question">இணையாக உள்ள இரண்டு சமதள ஆடிகளுக்கிடையே தோன்றும் பிம்பங்களின் எண்ணிக்கை?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">முடிவிலி (Infinite)</div>
+        <div class="explanation">கோணம் $\theta = 0^\circ$ என்பதால் கணக்கற்ற முடிவிலா பிம்பங்கள் உருவாகும்</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 14 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 14</span>
+        <div class="question">ரேடியோ தொலைநோக்கிகளில் பயன்படும் ஆடி வகை எது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">பரவளைய ஆடி (Parabolic Mirror)</div>
+        <div class="explanation">சமந்தர கதிர்களை ஒரே குவியப்புள்ளியில் குவிக்கப் பயன்படுகிறது</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 15 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 15</span>
+        <div class="question">ஒளிவிலகலுக்கான ஸ்நெல் விதியின் சமன்பாடு என்ன?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">$\sin i / \sin r = \mu$</div>
+        <div class="explanation">படுகோணத்தின் சைன் மதிப்பிற்கும் விலகுகோணத்தின் சைன் மதிப்பிற்கும் உள்ள தகவு ஒரு மாறிலி</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 16 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 16</span>
+        <div class="question">இயற்கையில் நிகழும் நிறப்பிரிகைக்குச் சிறந்த எடுத்துக்காட்டு எது?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">வானவில் (Rainbow)</div>
+        <div class="explanation">மழைத்துளிகளால் சூரிய ஒளி நிறப்பிரிகை மற்றும் முழு அக எதிரொளிப்பு அடைவதால் தோன்றும்</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 17 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 17</span>
+        <div class="question">கோளக ஆடியின் வளைவு ஆரம் 25 செ.மீ எனில், அதன் குவியத் தொலைவு எவ்வளவு?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">12.5 செ.மீ</div>
+        <div class="explanation">குவியத் தொலைவு $f = R / 2 = 25 / 2 = 12.5\text{ cm}$</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 18 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 18</span>
+        <div class="question">இரண்டு சமதள ஆடிகளுக்கு இடைப்பட்ட கோணம் 45° எனில் தோன்றும் பிம்பங்கள் எத்தனை?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">7 பிம்பங்கள்</div>
+        <div class="explanation">பிம்பங்கள் எண்ணிக்கை $n = (360^\circ / \theta) - 1 = (360 / 45) - 1 = 8 - 1 = 7$</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 19 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 19</span>
+        <div class="question">காற்றில் ஒளியின் திசைவேகம் $3 \times 10^8\text{ m/s}$, ஒளிவிலகல் எண் 1.5 எனில் ஊடகத்தில் திசைவேகம்?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">$2 \times 10^8\text{ m/s}$</div>
+        <div class="explanation">$v = c / \mu = (3 \times 10^8) / 1.5 = 2 \times 10^8\text{ m/s}$</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 20 -->
+  <div class="card-scene" onclick="toggleFlip(this)">
+    <div class="card">
+      <div class="card-face card-front">
+        <span class="card-number">அட்டை 20</span>
+        <div class="question">கலைடாஸ்கோப் மற்றும் பெரிஸ்கோப் செயல்படும் தத்துவங்கள் யாவை?</div>
+        <span class="hint-text">விடை பார்க்க கிளிக் செய்யவும் ↻</span>
+      </div>
+      <div class="card-face card-back">
+        <span class="badge-answer">விடை</span>
+        <div class="answer">பல்வகை எதிரொளிப்பு & ஒளி எதிரொளிப்பு விதி</div>
+        <div class="explanation">கலைடாஸ்கோப்: பலமுறை எதிரொளிப்பு; பெரிஸ்கோப்: 45° கோணத்தில் இரண்டு சமதள ஆடிகள்</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  function toggleFlip(scene) {
+    const card = scene.querySelector('.card');
+    card.classList.toggle('is-flipped');
+  }
+
+  function flipAll(shouldFlip) {
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+      if (shouldFlip) {
+        card.classList.add('is-flipped');
+      } else {
+        card.classList.remove('is-flipped');
+      }
+    });
+  }
+
+  function filterCards() {
+    const term = document.getElementById('searchInput').value.toLowerCase().trim();
+    const scenes = document.querySelectorAll('.card-scene');
+
+    scenes.forEach(scene => {
+      const q = scene.querySelector('.question').innerText.toLowerCase();
+      const a = scene.querySelector('.answer').innerText.toLowerCase();
+      const num = scene.querySelector('.card-number').innerText.toLowerCase();
+
+      if (q.includes(term) || a.includes(term) || num.includes(term)) {
+        scene.style.display = 'block';
+      } else {
+        scene.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
